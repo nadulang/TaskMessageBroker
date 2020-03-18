@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Application\" />
+    <Folder Include="Domain\" />
+    <Folder Include="Infrastructure\" />
+    <Folder Include="Presenter\" />
+    <Folder Include="Domain\Entities\" />
+    <Folder Include="Application\Models\" />
+    <Folder Include="Application\UseCases\" />
+    <Folder Include="Infrastructure\Persistences\" />
+    <Folder Include="Application\UseCases\Users\" />
+    <Folder Include="Application\UseCases\Users\Command\" />
+    <Folder Include="Application\UseCases\Users\Queries\" />
+    <Folder Include="Application\Models\Query\" />
+    <Folder Include="Application\UseCases\Users\Command\CreateUser\" />
+    <Folder Include="Application\UseCases\Users\Command\UpdateUser\" />
+    <Folder Include="Application\UseCases\Users\Command\DeleteUser\" />
+    <Folder Include="Application\UseCases\Users\Queries\GetUser\" />
+    <Folder Include="Application\UseCases\Users\Queries\GetUsers\" />
+    <Folder Include="Presenter\Controller\" />
+    <Folder Include="Application\UseCases\Users\Request\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.2">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.2" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="MediatR" Version="8.0.1" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.2" />
+    <PackageReference Include="MailKit" Version="2.5.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+  </ItemGroup>
+
+</Project>

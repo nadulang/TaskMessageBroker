@@ -1,16 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Reflection;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NotificationService.Application.UseCases.Notifications.Queries.GetAll;
 using NotificationService.Infrastructure.Persistences;
 
 namespace NotificationService
@@ -28,6 +24,7 @@ namespace NotificationService
         {
             services.AddDbContext<NotificationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("defaultConnection")));
             services.AddControllers();
+            services.AddMediatR(typeof(GetAllQueryHandler).GetTypeInfo().Assembly);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mail;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using NotificationService.Application.UseCases.Notifications.Command.Request;
 using NotificationService.Domain.Entities;
 using NotificationService.Infrastructure.Persistences;
@@ -53,6 +58,24 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
                 message = "Notification data has been added successfully",
                 success = true
             };
+        }
+
+        public async Task<List<Users_>> GetUserData()
+        {
+            var client = new HttpClient();
+            var data = await client.GetStringAsync("http://localhost:5400/api/users");
+            return JsonConvert.DeserializeObject<List<Users_>>(data);
+        }
+
+        public async Task SendMail(string emailfrom, string emailto, string subject, string body)
+        {
+            var client = new SmtpClient("smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("84b015139889ab", "a7eda17f7b7703"),
+                EnableSsl = true
+            };
+            await client.SendMailAsync(emailfrom, emailto, subject, body);
+            Console.WriteLine("Email has been sent");
         }
     }
 }

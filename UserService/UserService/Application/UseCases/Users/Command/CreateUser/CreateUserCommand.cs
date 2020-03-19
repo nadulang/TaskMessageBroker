@@ -18,7 +18,7 @@ namespace UserService.Application.UseCases.Users.Command.CreateUser
         public string Message { get; set; }
         public string Type { get; set; }
         public int From { get; set; }
-        public List<Target> Targets { get; set; }
+        public List<Target> Target { get; set; }
     }
 
     public class Target

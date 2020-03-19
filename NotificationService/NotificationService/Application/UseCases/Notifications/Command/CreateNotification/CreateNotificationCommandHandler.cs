@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,6 +13,7 @@ using Newtonsoft.Json;
 using NotificationService.Application.UseCases.Notifications.Command.Request;
 using NotificationService.Domain.Entities;
 using NotificationService.Infrastructure.Persistences;
+using RabbitMQ.Client;
 
 namespace NotificationService.Application.UseCases.Notifications.Command.CreateNotification
 {
@@ -26,6 +28,7 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
 
         public async Task<NotifDto> Handle(CreateNotificationCommand request, CancellationToken cancellationToken)
         {
+
             var input = request.Data.Attributes;
 
             var notdata = new Notifications_
@@ -39,7 +42,7 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
 
             var ID = await _context.Notifications.ToListAsync();
 
-            foreach (var log in input.Targets)
+            foreach (var log in input.Target)
             {
                 _context.Logs.Add(new NotificationLogs_
                 {
@@ -50,8 +53,10 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
                     email_destination = log.Email_destination
                 });
 
-                await _context.SaveChangesAsync();
+                SendMail("cacangie45@gmail.com", log.Email_destination, input.Title, input.Message);
+                
             }
+            await _context.SaveChangesAsync();
 
             return new NotifDto
             {
@@ -67,15 +72,25 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
             return JsonConvert.DeserializeObject<List<Users_>>(data);
         }
 
-        public async Task SendMail(string emailfrom, string emailto, string subject, string body)
+        public void SendMail(string emailfrom, string emailto, string subject, string body)
         {
+
+            Console.WriteLine("Email has been sent");
+
             var client = new SmtpClient("smtp.mailtrap.io", 2525)
             {
                 Credentials = new NetworkCredential("84b015139889ab", "a7eda17f7b7703"),
                 EnableSsl = true
             };
-            await client.SendMailAsync(emailfrom, emailto, subject, body);
+
+            client.Send(emailfrom, emailto, subject, body);
             Console.WriteLine("Email has been sent");
+
         }
     }
+
+        
+        
+        
+    
 }

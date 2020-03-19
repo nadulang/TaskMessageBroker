@@ -16,10 +16,10 @@ namespace NotificationService.Application.UseCases.Notifications.Command.CreateN
         public string Message { get; set; }
         public string Type { get; set; }
         public int From { get; set; }
-        public List<Target> Targets { get; set; }
+        public List<Targets> Target { get; set; }
     }
 
-    public class Target
+    public class Targets
     {
         public int Id { get; set; }
         public string Email_destination { get; set; }

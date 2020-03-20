@@ -65,8 +65,9 @@ namespace UserService.Application.UseCases.Users.Command.CreateUser
 
                 var jsonObject = JsonConvert.SerializeObject(httpContent);
             //var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
+            //await client.PostAsync("http://localhost:5800/api/notification", content);
 
-            
+
 
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
@@ -87,11 +88,9 @@ namespace UserService.Application.UseCases.Users.Command.CreateUser
                                      body: body);
 
                 Console.WriteLine("Message has sent");
-                //await client.PostAsync("http://localhost:5800/api/notification", );
-                Console.ReadLine();
+               
             
             }
-            Console.ReadLine();
 
             return new UserDto
             {

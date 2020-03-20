@@ -55,6 +55,8 @@ namespace NotificationService
             {
                 endpoints.MapControllers();
             });
+
+            GetAllQueryHandler.ReceiveRabbit();
         }
     }
 }

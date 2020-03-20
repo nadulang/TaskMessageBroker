@@ -25,7 +25,7 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
 
         public async Task<GetAllDto> Handle(GetAllQuery request, CancellationToken cancellationToken)
         {
-            ReceiveRabbit();
+            
             var not = await _context.Notifications.ToListAsync();
             var log = await _context.Logs.ToListAsync();
             var time = (DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0).ToLocalTime()).TotalSeconds;
@@ -82,7 +82,7 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
 
         }
 
-        public void ReceiveRabbit()
+        public static void ReceiveRabbit()
         {
             var client = new HttpClient();
             var factory = new ConnectionFactory() { HostName = "localhost" };
@@ -91,8 +91,8 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
             {
                 channel.ExchangeDeclare("pakpos", "fanout");
 
-                var queueName = channel.QueueDeclare();
-                channel.QueueBind(queueName, "pakpos", string.Empty);
+                var queueName = channel.QueueDeclare().QueueName;
+                channel.QueueBind(queueName, "pakpos", routingKey: "");
 
                 var consumer = new EventingBasicConsumer(channel);
 
@@ -106,8 +106,7 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
                     await client.PostAsync("http://localhost:5800/api/notification", content);
                 };
 
-                channel.BasicConsume(queue: "halopakpos", autoAck: true, consumer: consumer);
-                Console.ReadLine();
+                channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
 
 
             }

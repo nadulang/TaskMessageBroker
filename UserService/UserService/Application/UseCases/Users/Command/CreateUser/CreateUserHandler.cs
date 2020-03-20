@@ -65,26 +65,29 @@ namespace UserService.Application.UseCases.Users.Command.CreateUser
 
                 var jsonObject = JsonConvert.SerializeObject(httpContent);
             //var content = new StringContent(jsonObject, Encoding.UTF8, "application/json");
-            //await client.PostAsync("http://localhost:5800/api/notification", );
 
+            
 
             var factory = new ConnectionFactory() { HostName = "localhost" };
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.ExchangeDeclare(exchange: "pakpos", "fanout");
+                channel.ExchangeDeclare(exchange: "halopakpos", "fanout");
+
+                channel.QueueDeclare(queue: "pakpos", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                channel.QueueBind("pakpos", "halopakpos", routingKey: "");
 
                 var body = Encoding.UTF8.GetBytes(jsonObject);
                 var properties = channel.CreateBasicProperties();
                 properties.Persistent = true;
 
-                channel.BasicPublish(exchange: "pakpos", 
+                channel.BasicPublish(exchange: "halopakpos", 
                                      routingKey: "",
                                      basicProperties: null,
                                      body: body);
 
                 Console.WriteLine("Message has sent");
-                
+                //await client.PostAsync("http://localhost:5800/api/notification", );
                 Console.ReadLine();
             
             }

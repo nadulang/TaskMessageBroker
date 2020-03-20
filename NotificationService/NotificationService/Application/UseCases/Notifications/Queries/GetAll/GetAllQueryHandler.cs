@@ -68,7 +68,6 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
                     });
                 }
 
-
                 return new GetAllDto
                 {
 
@@ -76,40 +75,12 @@ namespace NotificationService.Application.UseCases.Notifications.Queries.GetAll
                     success = true,
                     data = allnotifications
 
-
                 };
+
             }
 
         }
 
-        public static void ReceiveRabbit()
-        {
-            var client = new HttpClient();
-            var factory = new ConnectionFactory() { HostName = "localhost" };
-            using (var connection = factory.CreateConnection())
-            using (var channel = connection.CreateModel())
-            {
-                channel.ExchangeDeclare("pakpos", "fanout");
-
-                var queueName = channel.QueueDeclare().QueueName;
-                channel.QueueBind(queueName, "pakpos", routingKey: "");
-
-                var consumer = new EventingBasicConsumer(channel);
-
-                consumer.Received += async (model, ea) =>
-                {
-                    var body = ea.Body;
-                    var message = Encoding.UTF8.GetString(body);
-                    var content = new StringContent(message, Encoding.UTF8, "application/json");
-                    Console.WriteLine("A has been received.");
-
-                    await client.PostAsync("http://localhost:5800/api/notification", content);
-                };
-
-                channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
-
-
-            }
-        }
+       
     }
 }

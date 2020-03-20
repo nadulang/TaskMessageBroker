@@ -28,8 +28,8 @@ namespace NotificationService
         {
             services.AddDbContext<NotificationContext>(options => options.UseNpgsql(Configuration.GetConnectionString("defaultConnection")));
             services.AddControllers();
-            //services.AddHangfire(config =>
-            //            config.UsePostgreSqlStorage("Host=127.0.0.1;Database=bg-db;Username=postgres;Password=docker"));
+            services.AddHangfire(config =>
+                        config.UsePostgreSqlStorage("Host=127.0.0.1;Database=bgdb;Username=postgres;Password=docker"));
             services.AddMediatR(typeof(GetAllQueryHandler).GetTypeInfo().Assembly);
         }
 
@@ -40,10 +40,10 @@ namespace NotificationService
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseHangfireServer();
+            app.UseHangfireServer();
 
-            //app.UseHangfireDashboard();
-            //BackgroundJob.Enqueue
+            app.UseHangfireDashboard();
+            RecurringJob.AddOrUpdate(() => ReceiverRabbit.Receiver(), Cron.Minutely);
 
             //app.UseHttpsRedirection();
 
@@ -56,7 +56,7 @@ namespace NotificationService
                 endpoints.MapControllers();
             });
 
-            GetAllQueryHandler.ReceiveRabbit();
+
         }
     }
 }

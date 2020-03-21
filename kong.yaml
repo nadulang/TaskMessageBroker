@@ -1,0 +1,195 @@
+_format_version: "1.1"
+services:
+- connect_timeout: 60000
+  host: dotnet-customersservice
+  name: card-service
+  path: /api/Payment
+  port: 3000
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  write_timeout: 60000
+  routes:
+  - id: 869b8bd0-9eac-412e-b0df-21634f132848
+    paths:
+    - /api/card
+    path_handling: v0
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+    plugins:
+    - name: jwt
+      config:
+        anonymous: null
+        claims_to_verify: null
+        cookie_names: []
+        header_names:
+        - authorization
+        key_claim_name: iss
+        maximum_expiration: 0
+        run_on_preflight: true
+        secret_is_base64: false
+        uri_param_names:
+        - jwt
+      enabled: true
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+- connect_timeout: 60000
+  host: dotnet-customersservice
+  name: customer-service
+  path: /api/Customer
+  port: 3000
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  write_timeout: 60000
+  routes:
+  - id: 384c5ca4-d4b9-4a5e-8cf8-c7949289bd5a
+    paths:
+    - /api/customer
+    path_handling: v0
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+    plugins:
+    - name: jwt
+      config:
+        anonymous: null
+        claims_to_verify: null
+        cookie_names: []
+        header_names:
+        - authorization
+        key_claim_name: iss
+        maximum_expiration: 0
+        run_on_preflight: true
+        secret_is_base64: false
+        uri_param_names:
+        - jwt
+      enabled: true
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+- connect_timeout: 60000
+  host: dotnet-merchantservice
+  name: merchant-service
+  path: /api/Merchants
+  port: 4000
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  write_timeout: 60000
+  routes:
+  - id: 69c74e68-5ef8-4634-9efe-df0aa9c442e7
+    paths:
+    - /api/merchant
+    path_handling: v0
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+    plugins:
+    - name: basic-auth
+      config:
+        anonymous: null
+        hide_credentials: false
+      enabled: true
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+- connect_timeout: 60000
+  host: notification-service
+  name: notification-service
+  path: /api/notification
+  port: 5800
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  write_timeout: 60000
+  routes:
+  - id: 774805e3-1e4b-483b-8a34-a9368136174d
+    paths:
+    - /api/notification
+    path_handling: v0
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+  plugins:
+  - name: basic-auth
+    config:
+      anonymous: null
+      hide_credentials: false
+    enabled: true
+    protocols:
+    - grpc
+    - grpcs
+    - http
+    - https
+- connect_timeout: 60000
+  host: dotnet-productservice
+  name: product-service
+  path: /api/Product
+  port: 5000
+  protocol: http
+  read_timeout: 60000
+  retries: 5
+  write_timeout: 60000
+  routes:
+  - id: 47760be5-ca9f-4e24-b55d-8fc259b16478
+    paths:
+    - /api/product
+    path_handling: v0
+    preserve_host: false
+    protocols:
+    - http
+    - https
+    regex_priority: 0
+    strip_path: true
+    https_redirect_status_code: 426
+    plugins:
+    - name: key-auth
+      config:
+        anonymous: null
+        hide_credentials: false
+        key_in_body: false
+        key_names:
+        - apikey
+        run_on_preflight: true
+      enabled: true
+      protocols:
+      - grpc
+      - grpcs
+      - http
+      - https
+consumers:
+- username: john
+  keyauth_credentials:
+  - key: Ma8ruAmuJFOx61Gn8pLe4qVElJdPw7Iv
+  jwt_secrets:
+  - algorithm: HS256
+    key: cJQB7kOhYE0Bumht9zfTQxYPo7ItgOZf
+    secret: fwnTSutGCKr5nPkmJkk7DLfACcH1uyHN
+  basicauth_credentials:
+  - username: Aladdin
+    password: 40baaeab319ccee60a1eca1c1fe6fe926361b2d0
